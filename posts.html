@@ -1,0 +1,181 @@
+---
+layout: default
+title: All Posts
+permalink: /posts/
+---
+
+<div class="posts-archive">
+    <h1>All Posts</h1>
+    
+    {% if site.posts.size > 0 %}
+        <p class="posts-count">{{ site.posts.size }} {% if site.posts.size == 1 %}post{% else %}posts{% endif %} published</p>
+        
+        {% for post in site.posts %}
+        <article class="post-entry">
+            <div class="post-header">
+                <h2 class="post-title">
+                    <a href="{{ post.url }}">{{ post.title }}</a>
+                </h2>
+                <div class="post-meta">
+                    <span class="post-date">{{ post.date | date: "%B %-d, %Y" }}</span>
+                    {% if post.categories.size > 0 %}
+                    <span class="post-categories">
+                        {% for category in post.categories %}
+                        <span class="category-tag">{{ category }}</span>
+                        {% endfor %}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="post-summary">
+                {% if post.description %}
+                    <p>{{ post.description }}</p>
+                {% else %}
+                    <p>{{ post.excerpt | strip_html | truncatewords: 40 }}</p>
+                {% endif %}
+                <a href="{{ post.url }}" class="read-more-link">Read full post →</a>
+            </div>
+        </article>
+        {% endfor %}
+        
+    {% else %}
+        <div class="no-posts">
+            <p>No posts published yet. Check back soon for new content!</p>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.posts-archive h1 {
+    color: var(--primary-dark);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    border-bottom: 3px solid var(--primary-blue);
+    padding-bottom: 15px;
+}
+
+.posts-count {
+    color: var(--light-text);
+    font-size: 1rem;
+    margin-bottom: 40px;
+    font-style: italic;
+}
+
+.post-entry {
+    background: var(--background);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 25px;
+    margin-bottom: 25px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post-entry:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.post-header {
+    margin-bottom: 15px;
+}
+
+.post-title {
+    margin: 0 0 10px 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.post-title a {
+    color: var(--primary-dark);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.post-title a:hover {
+    color: var(--primary-blue);
+}
+
+.post-meta {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.9rem;
+    color: var(--light-text);
+    margin-bottom: 15px;
+}
+
+.post-date {
+    font-weight: 500;
+}
+
+.post-categories {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.category-tag {
+    background: var(--primary-blue);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-family: var(--font-family-mono);
+}
+
+.post-summary p {
+    color: var(--dark-text);
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.read-more-link {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.read-more-link:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.no-posts {
+    text-align: center;
+    padding: 60px 30px;
+    background: var(--background-alt);
+    border-radius: var(--border-radius);
+    border: 2px dashed var(--border-color);
+}
+
+.no-posts p {
+    color: var(--light-text);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .posts-archive h1 {
+        font-size: 2rem;
+    }
+    
+    .post-entry {
+        padding: 20px;
+    }
+    
+    .post-title {
+        font-size: 1.4rem;
+    }
+    
+    .post-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+</style>
