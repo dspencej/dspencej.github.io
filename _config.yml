@@ -1,0 +1,46 @@
+# Site settings
+title: QwertyBits
+description: "A tech blog covering programming, software development, and digital innovations"
+url: "https://qwertybits.io"
+baseurl: ""
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# SEO settings
+author: "Dustin Spencer"
+social:
+  name: "Dustin Spencer"
+  links:
+    - "https://github.com/dspencej"
+    - "https://www.linkedin.com/in/dustin-spencer"
+
+# Blog settings
+paginate: 5
+paginate_path: "/page:num/"
+
+# Exclude from processing
+exclude:
+  - .gitignore
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /:categories/:year/:month/:day/:title/
