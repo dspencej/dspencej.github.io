@@ -1,0 +1,100 @@
+name: Preview Deployment
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths: ['_posts/**', '_drafts/**', '*.md', '*.html', 'assets/**']
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    if: contains(github.head_ref, 'blog/')
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.1'
+        bundler-cache: true
+        
+    - name: Build preview site
+      run: |
+        echo "🏗️ Building preview site for branch: ${{ github.head_ref }}"
+        
+        # Build site with drafts included
+        bundle exec jekyll build --drafts --config _config.yml
+        
+        # Add preview banner to all HTML files
+        find _site -name "*.html" -exec sed -i '/<body>/a \
+        <div style="background: #e67e22; color: white; padding: 10px; text-align: center; font-weight: bold; position: sticky; top: 0; z-index: 1000;"> \
+        🚧 PREVIEW MODE - Branch: ${{ github.head_ref }} | PR: #${{ github.event.number }} 🚧 \
+        </div>' {} \;
+        
+    - name: Deploy to Netlify Preview
+      uses: nwtgck/actions-netlify@v3.0
+      with:
+        publish-dir: './_site'
+        production-deploy: false
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        deploy-message: "Preview for PR #${{ github.event.number }}: ${{ github.event.pull_request.title }}"
+        alias: pr-${{ github.event.number }}
+        enable-commit-comment: true
+        enable-pull-request-comment: true
+        overwrites-pull-request-comment: true
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        
+    - name: Comment on PR with preview link
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          
+          const botComment = comments.find(comment => 
+            comment.user.type === 'Bot' && 
+            comment.body.includes('🔍 Blog Post Preview')
+          );
+          
+          const commentBody = `## 🔍 Blog Post Preview Ready!
+          
+**Branch:** \`${{ github.head_ref }}\`
+**Preview URL:** https://pr-${{ github.event.number }}--qwertybits.netlify.app/
+
+### 📝 Review Checklist
+- [ ] Content is well-structured and flows logically
+- [ ] Code examples (if any) are correct and properly formatted
+- [ ] Links work and are relevant
+- [ ] Images display correctly and have alt text
+- [ ] Post follows QwertyBits style and branding
+- [ ] Technical accuracy verified
+- [ ] Grammar and spelling checked
+- [ ] Categories and tags are appropriate
+
+### 🎯 Post Quality Metrics
+View the automated quality report in the **Actions** tab for detailed analysis.
+
+*Preview updates automatically with each push to this branch.*`;
+          
+          if (botComment) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: commentBody,
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: commentBody,
+            });
+          }

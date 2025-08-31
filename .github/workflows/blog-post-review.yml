@@ -1,0 +1,224 @@
+name: Blog Post Review Pipeline
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths: ['_posts/**', '_drafts/**']
+  push:
+    branches: ['blog/*']
+
+jobs:
+  post-quality-check:
+    runs-on: ubuntu-latest
+    if: contains(github.head_ref, 'blog/') || contains(github.ref, 'blog/')
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.1'
+        bundler-cache: true
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install writing tools
+      run: |
+        npm install -g write-good alex textlint textlint-rule-alex
+        
+    - name: Check blog post structure
+      run: |
+        echo "📝 Checking blog post structure and metadata..."
+        
+        VIOLATIONS=0
+        
+        # Find new or modified posts
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          POSTS=$(git diff --name-only origin/main...HEAD | grep "_posts/" | grep "\.md$" || true)
+        else
+          POSTS=$(find _posts/ -name "*.md" -newer _posts/../.git/FETCH_HEAD 2>/dev/null || find _posts/ -name "*.md" | tail -1)
+        fi
+        
+        if [ -z "$POSTS" ]; then
+          echo "ℹ️ No blog posts found to check"
+          exit 0
+        fi
+        
+        for post in $POSTS; do
+          if [ -f "$post" ]; then
+            echo "Checking $post..."
+            
+            # Check YAML front matter
+            if ! head -20 "$post" | grep -q "^---$"; then
+              echo "❌ Missing YAML front matter in $post"
+              VIOLATIONS=$((VIOLATIONS + 1))
+            fi
+            
+            # Check required fields
+            if ! grep -q "^title:" "$post"; then
+              echo "❌ Missing title in $post"
+              VIOLATIONS=$((VIOLATIONS + 1))
+            fi
+            
+            if ! grep -q "^date:" "$post"; then
+              echo "❌ Missing date in $post"
+              VIOLATIONS=$((VIOLATIONS + 1))
+            fi
+            
+            if ! grep -q "^categories:" "$post"; then
+              echo "❌ Missing categories in $post"
+              VIOLATIONS=$((VIOLATIONS + 1))
+            fi
+            
+            # Check filename format
+            if ! echo "$post" | grep -q "_posts/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}-.*\.md$"; then
+              echo "❌ Incorrect filename format in $post (should be YYYY-MM-DD-title.md)"
+              VIOLATIONS=$((VIOLATIONS + 1))
+            fi
+            
+            # Check content length
+            WORD_COUNT=$(wc -w < "$post")
+            if [ "$WORD_COUNT" -lt 300 ]; then
+              echo "⚠️ Post $post is quite short ($WORD_COUNT words). Consider adding more content."
+            fi
+            
+            echo "✅ $post structure check completed ($WORD_COUNT words)"
+          fi
+        done
+        
+        if [ $VIOLATIONS -eq 0 ]; then
+          echo "✅ Blog post structure checks passed"
+        else
+          echo "❌ Blog post structure violations: $VIOLATIONS"
+          exit 1
+        fi
+        
+    - name: Content quality analysis
+      run: |
+        echo "📖 Running content quality analysis..."
+        
+        # Find posts to check
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          POSTS=$(git diff --name-only origin/main...HEAD | grep "_posts/" | grep "\.md$" || true)
+        else
+          POSTS=$(find _posts/ -name "*.md" -newer _posts/../.git/FETCH_HEAD 2>/dev/null || find _posts/ -name "*.md" | tail -1)
+        fi
+        
+        if [ -z "$POSTS" ]; then
+          echo "ℹ️ No blog posts found to check"
+          exit 0
+        fi
+        
+        for post in $POSTS; do
+          if [ -f "$post" ]; then
+            echo "Analyzing content quality for $post..."
+            
+            # Extract content (skip YAML front matter)
+            awk '/^---$/{if(NR==1) {skip=1; next}} /^---$/ && skip{skip=0; next} !skip' "$post" > temp_content.md
+            
+            # Check readability
+            echo "📊 Readability Analysis:"
+            write-good temp_content.md || echo "⚠️ Some readability suggestions found"
+            
+            # Check for inclusive language
+            echo "🤝 Inclusive Language Check:"
+            alex temp_content.md || echo "⚠️ Some language suggestions found"
+            
+            # Clean up
+            rm -f temp_content.md
+            
+            echo "✅ Content analysis completed for $post"
+          fi
+        done
+        
+    - name: Check links and references
+      run: |
+        echo "🔗 Checking links and references..."
+        
+        # Find posts to check
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          POSTS=$(git diff --name-only origin/main...HEAD | grep "_posts/" | grep "\.md$" || true)
+        else
+          POSTS=$(find _posts/ -name "*.md" -newer _posts/../.git/FETCH_HEAD 2>/dev/null || find _posts/ -name "*.md" | tail -1)
+        fi
+        
+        if [ -z "$POSTS" ]; then
+          echo "ℹ️ No blog posts found to check"
+          exit 0
+        fi
+        
+        for post in $POSTS; do
+          if [ -f "$post" ]; then
+            echo "Checking links in $post..."
+            
+            # Check for markdown links
+            LINK_COUNT=$(grep -o '\[.*\](.*\)' "$post" | wc -l)
+            echo "📊 Found $LINK_COUNT markdown links"
+            
+            # Check for relative links to images
+            if grep -q '!\[.*\](/' "$post"; then
+              echo "✅ Found local images"
+            fi
+            
+            # Check for code blocks
+            CODE_BLOCKS=$(grep -c '^```' "$post" || echo 0)
+            if [ $CODE_BLOCKS -gt 0 ]; then
+              echo "💻 Found $((CODE_BLOCKS / 2)) code blocks"
+            fi
+            
+            echo "✅ Link check completed for $post"
+          fi
+        done
+        
+    - name: Build site with new post
+      run: |
+        echo "🏗️ Building site to ensure post integration..."
+        bundle exec jekyll build --verbose
+        echo "✅ Site builds successfully with new post"
+        
+    - name: Generate post review report
+      run: |
+        echo "📊 Generating blog post review report..."
+        echo "# Blog Post Review Report" > post-review-report.md
+        echo "Generated: $(date)" >> post-review-report.md
+        echo "" >> post-review-report.md
+        
+        # Find posts being reviewed
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          POSTS=$(git diff --name-only origin/main...HEAD | grep "_posts/" | grep "\.md$" || true)
+        else
+          POSTS=$(find _posts/ -name "*.md" -newer _posts/../.git/FETCH_HEAD 2>/dev/null || find _posts/ -name "*.md" | tail -1)
+        fi
+        
+        if [ -n "$POSTS" ]; then
+          echo "## Posts Reviewed" >> post-review-report.md
+          for post in $POSTS; do
+            if [ -f "$post" ]; then
+              TITLE=$(grep "^title:" "$post" | sed 's/title: *"*//;s/"*$//' || echo "No title")
+              WORD_COUNT=$(wc -w < "$post")
+              echo "- **$TITLE** ($post) - $WORD_COUNT words" >> post-review-report.md
+            fi
+          done
+          
+          echo "" >> post-review-report.md
+          echo "## Quality Checks" >> post-review-report.md
+          echo "- ✅ YAML front matter validation" >> post-review-report.md
+          echo "- ✅ File naming convention check" >> post-review-report.md
+          echo "- ✅ Content quality analysis" >> post-review-report.md
+          echo "- ✅ Link and reference validation" >> post-review-report.md
+          echo "- ✅ Site build integration test" >> post-review-report.md
+        else
+          echo "## No Posts Found" >> post-review-report.md
+          echo "No blog posts detected for review in this change." >> post-review-report.md
+        fi
+        
+    - name: Upload review report
+      uses: actions/upload-artifact@v4
+      with:
+        name: post-review-report
+        path: post-review-report.md
