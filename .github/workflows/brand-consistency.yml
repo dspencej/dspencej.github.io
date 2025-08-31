@@ -130,10 +130,10 @@ jobs:
           fi
         done
         
-        # Check if layouts include brand.css
+        # Check if layouts include brand.css (or extend a layout that does)
         for file in $(find _layouts -name "*.html" 2>/dev/null || true); do
-          if ! grep -q "brand.css" "$file"; then
-            echo "❌ Layout $file does not include brand.css"
+          if ! grep -q "brand.css" "$file" && ! grep -q "layout: default" "$file"; then
+            echo "❌ Layout $file does not include brand.css or extend default layout"
             VIOLATIONS=$((VIOLATIONS + 1))
           fi
         done
