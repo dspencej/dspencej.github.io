@@ -55,10 +55,10 @@ When you push to a `blog/*` branch, the following checks run automatically:
 - **Build Test**: Ensures post integrates correctly
 - **Quality Report**: Detailed analysis and metrics
 
-### 🔍 Preview Deployment
-- **Live Preview**: Deployed to Netlify with preview banner
-- **PR Comments**: Automatic preview links and review checklist
-- **Branch Updates**: Preview refreshes with each push
+### 🏠 Local Preview
+- **Live Preview**: Local Jekyll server with live reload
+- **Branch Testing**: Test posts locally before PR
+- **GitHub Pages**: Final deployment to production
 
 ### 🎨 Brand & Quality Compliance
 - **Brand Consistency**: Colors, fonts, component usage
@@ -111,18 +111,17 @@ description: "Brief description for SEO"
 2. ✅ **Content quality** analysis complete
 3. ✅ **Brand compliance** verified
 4. ✅ **Site builds** successfully
-5. ✅ **Preview deployed** and accessible
 
 ### Manual Review (Self-Review)
 1. 📖 **Content accuracy** - technical details correct
 2. 🎯 **Target audience** - appropriate for QwertyBits readers  
 3. 📝 **Writing quality** - clear, engaging, well-edited
 4. 🔗 **Links and references** - working and relevant
-5. 📱 **Mobile preview** - looks good on all devices
+5. 📱 **Local preview** - test with `bundle exec jekyll serve --drafts`
 
 ### Approval Criteria
 - [ ] All automated checks pass
-- [ ] Preview looks correct
+- [ ] Local preview looks correct
 - [ ] Content is ready for publication
 - [ ] No major revisions needed
 
