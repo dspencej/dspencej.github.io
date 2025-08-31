@@ -6,26 +6,27 @@ permalink: /about/
 
 # About QwertyBits
 
-Welcome to QwertyBits, where technology meets curiosity. I'm Dustin Spencer, a passionate software developer who enjoys exploring the intersection of code, creativity, and problem-solving.
+Welcome to QwertyBits, where technology meets curiosity. I'm Dustin Spencer, a technology enthusiast who enjoys exploring the intersection of code, creativity, and innovation.
 
-## What I Do
+## What I'm Passionate About
 
-I'm a software engineer with experience in:
+My interests span across various areas of technology:
 
-- **Web Development**: Building modern, responsive applications using current frameworks and best practices
-- **Full-Stack Development**: From database design to user interface implementation
-- **Software Architecture**: Designing scalable, maintainable systems
-- **DevOps & Automation**: Streamlining development workflows and deployment processes
+- **AI & Machine Learning**: Exploring language models, neural networks, and AI applications
+- **Embedded Systems**: Tinkering with microcontrollers, IoT devices, and hardware programming
+- **Programming Languages**: Deep dives into different languages, paradigms, and development approaches
+- **Retro Gaming & Computing**: Exploring vintage systems, game development, and computing history
+- **Software Development**: Building tools, applications, and experimenting with new frameworks
 
 ## About This Blog
 
 QwertyBits serves as my digital space to share:
 
-- **Technical Tutorials**: Step-by-step guides and how-tos
-- **Code Deep Dives**: Exploring interesting programming concepts and patterns
-- **Industry Insights**: Thoughts on technology trends and best practices
-- **Project Showcases**: Highlighting interesting development projects
-- **Problem-Solving**: Solutions to challenging technical problems I've encountered
+- **AI & LLM Experiments**: Playing with language models, prompt engineering, and AI tools
+- **Embedded Projects**: Microcontroller tutorials, IoT builds, and hardware hacks
+- **Retro Computing**: Vintage system explorations, old-school programming, and gaming nostalgia
+- **Coding Adventures**: Language comparisons, framework experiments, and development tips
+- **Tech Tinkering**: Personal projects, interesting discoveries, and learning experiences
 
 ## My Philosophy
 
