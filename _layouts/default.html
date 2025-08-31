@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if page.title %}{{ page.title }} - {% endif %}QwertyBits</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+    
+    <!-- Brand CSS -->
+    <link rel="stylesheet" href="/assets/css/brand.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+    <meta name="author" content="{{ site.author }}">
+    
+    <style>
+        body {
+            font-family: var(--font-family-sans);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--background-alt);
+            color: var(--dark-text);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--background);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        .header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .site-title {
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 2.2rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+        .site-title:hover {
+            color: var(--primary-blue);
+        }
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-blue);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-family-mono);
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+        }
+        .nav {
+            text-align: center;
+        }
+        .nav a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        .nav a:hover, .nav a.active {
+            background-color: var(--primary-blue);
+            color: white;
+            transform: translateY(-1px);
+        }
+        .content {
+            margin-top: 30px;
+        }
+        .content h1 {
+            color: var(--primary-dark);
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-blue);
+            padding-bottom: 10px;
+        }
+        .content h2 {
+            color: var(--primary-blue);
+            font-size: 1.6rem;
+            margin: 30px 0 15px 0;
+            font-weight: 600;
+        }
+        .content h3 {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            margin: 25px 0 10px 0;
+            font-weight: 600;
+        }
+        .content p {
+            margin-bottom: 20px;
+            line-height: 1.7;
+            color: var(--medium-text);
+        }
+        .content ul {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+        .content li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+            color: var(--medium-text);
+        }
+        .content li strong {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+        .content a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .content a:hover {
+            text-decoration: underline;
+            color: var(--primary-dark);
+        }
+        .content blockquote {
+            background: var(--background-alt);
+            border-left: 4px solid var(--primary-blue);
+            margin: 25px 0;
+            padding: 20px 25px;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+        .content code {
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-family-mono);
+            font-size: 0.9em;
+            color: var(--secondary-green);
+        }
+        .content pre {
+            background: var(--code-bg);
+            border: 1px solid var(--code-border);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            overflow-x: auto;
+            margin: 25px 0;
+        }
+        .content pre code {
+            background: none;
+            padding: 0;
+            border-radius: 0;
+        }
+        .tech-highlight {
+            background: linear-gradient(135deg, var(--background-alt) 0%, #f1f5f9 100%);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+            border-left: 4px solid var(--secondary-green);
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="site-title">
+                <span class="logo-icon">QB</span>
+                QwertyBits
+            </a>
+            
+            <nav class="nav">
+                <a href="/" {% if page.url == '/' %}class="active"{% endif %}>Home</a>
+                <a href="/about/" {% if page.url == '/about/' %}class="active"{% endif %}>About</a>
+            </nav>
+        </header>
+        
+        <main class="content">
+            {{ content }}
+        </main>
+        
+        <footer class="footer">
+            <p>&copy; {{ 'now' | date: '%Y' }} QwertyBits. Built with Jekyll & GitHub Pages.</p>
+        </footer>
+    </div>
+</body>
+</html>

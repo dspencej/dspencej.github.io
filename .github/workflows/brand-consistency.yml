@@ -1,0 +1,165 @@
+name: Brand Consistency Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  brand-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        npm install -g stylelint postcss-html
+        
+    - name: Check brand color usage
+      run: |
+        echo "🎨 Checking brand color consistency..."
+        
+        # Check for hardcoded colors that should use CSS variables
+        VIOLATIONS=0
+        
+        # Check HTML files for hardcoded colors
+        if grep -r --include="*.html" --include="*.md" -n "#[0-9a-fA-F]\{6\}" . | grep -v "var(--" | grep -v "_site"; then
+          echo "❌ Found hardcoded hex colors in HTML/Markdown files"
+          VIOLATIONS=$((VIOLATIONS + 1))
+        fi
+        
+        # Check CSS files for non-brand colors
+        if grep -r --include="*.css" -n "#[0-9a-fA-F]\{6\}" . | grep -v "var(--" | grep -v "brand.css" | grep -v "_site"; then
+          echo "❌ Found hardcoded hex colors in CSS files"
+          VIOLATIONS=$((VIOLATIONS + 1))
+        fi
+        
+        # Check for old color values that should be updated
+        if grep -r --include="*.html" --include="*.css" --include="*.md" -i "#3498db\|#2c3e50\|#34495e\|#f8f9fa" . | grep -v "_site"; then
+          echo "❌ Found old brand colors that should use CSS variables"
+          VIOLATIONS=$((VIOLATIONS + 1))
+        fi
+        
+        if [ $VIOLATIONS -eq 0 ]; then
+          echo "✅ Brand color consistency check passed"
+        else
+          echo "❌ Brand consistency violations found: $VIOLATIONS"
+          exit 1
+        fi
+        
+    - name: Check typography consistency
+      run: |
+        echo "📝 Checking typography consistency..."
+        
+        VIOLATIONS=0
+        
+        # Check for hardcoded font families
+        if grep -r --include="*.html" --include="*.css" -i "font-family.*:" . | grep -v "var(--font-family" | grep -v "brand.css" | grep -v "_site"; then
+          echo "❌ Found hardcoded font-family declarations"
+          VIOLATIONS=$((VIOLATIONS + 1))
+        fi
+        
+        # Check for inconsistent heading styles
+        if grep -r --include="*.html" --include="*.css" -i "font-size.*px" . | grep -v "var(--" | grep -v "brand.css" | grep -v "_site" | head -5; then
+          echo "⚠️ Consider using rem units instead of px for better scalability"
+        fi
+        
+        if [ $VIOLATIONS -eq 0 ]; then
+          echo "✅ Typography consistency check passed"
+        else
+          echo "❌ Typography consistency violations found: $VIOLATIONS"
+          exit 1
+        fi
+        
+    - name: Check favicon presence
+      run: |
+        echo "🖼️ Checking favicon files..."
+        
+        if [ ! -f "assets/images/favicon.svg" ]; then
+          echo "❌ Missing SVG favicon"
+          exit 1
+        fi
+        
+        if [ ! -f "favicon.ico" ]; then
+          echo "❌ Missing ICO favicon"
+          exit 1
+        fi
+        
+        echo "✅ Favicon files present"
+        
+    - name: Check brand CSS integration
+      run: |
+        echo "🔧 Checking brand CSS integration..."
+        
+        VIOLATIONS=0
+        
+        # Check if HTML files include brand.css
+        for file in $(find . -name "*.html" -not -path "./_site/*"); do
+          if ! grep -q "brand.css" "$file"; then
+            echo "❌ $file does not include brand.css"
+            VIOLATIONS=$((VIOLATIONS + 1))
+          fi
+        done
+        
+        # Check if layouts include brand.css
+        for file in $(find _layouts -name "*.html" 2>/dev/null || true); do
+          if ! grep -q "brand.css" "$file"; then
+            echo "❌ Layout $file does not include brand.css"
+            VIOLATIONS=$((VIOLATIONS + 1))
+          fi
+        done
+        
+        if [ $VIOLATIONS -eq 0 ]; then
+          echo "✅ Brand CSS integration check passed"
+        else
+          echo "❌ Brand CSS integration violations found: $VIOLATIONS"
+          exit 1
+        fi
+        
+    - name: Check component consistency
+      run: |
+        echo "🧩 Checking component consistency..."
+        
+        # Check for consistent navigation structure
+        if ! grep -q "nav.*class.*nav" index.html; then
+          echo "⚠️ Navigation structure may be inconsistent"
+        fi
+        
+        # Check for consistent logo usage
+        if ! grep -q "logo-icon" index.html; then
+          echo "⚠️ Logo icon may be missing from homepage"
+        fi
+        
+        echo "✅ Component consistency check completed"
+        
+    - name: Generate brand report
+      run: |
+        echo "📊 Generating brand consistency report..."
+        echo "# Brand Consistency Report" > brand-report.md
+        echo "Generated: $(date)" >> brand-report.md
+        echo "" >> brand-report.md
+        
+        echo "## Color Usage Analysis" >> brand-report.md
+        echo "\`\`\`" >> brand-report.md
+        grep -r --include="*.css" "var(--" assets/ 2>/dev/null | wc -l | xargs echo "CSS variables used:" >> brand-report.md
+        grep -r --include="*.html" "var(--" . 2>/dev/null | wc -l | xargs echo "HTML variable references:" >> brand-report.md
+        echo "\`\`\`" >> brand-report.md
+        
+        echo "" >> brand-report.md
+        echo "## Files Checked" >> brand-report.md
+        find . -name "*.html" -o -name "*.css" -o -name "*.md" | grep -v "_site" | wc -l | xargs echo "Total files analyzed:" >> brand-report.md
+        
+    - name: Upload brand report
+      uses: actions/upload-artifact@v4
+      with:
+        name: brand-consistency-report
+        path: brand-report.md

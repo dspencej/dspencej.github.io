@@ -1,7 +1,8 @@
 ---
-layout: page
+layout: default
 title: About
 permalink: /about/
+description: "Learn about QwertyBits and Dustin Spencer's passion for AI, embedded systems, retro computing, and tech tinkering."
 ---
 
 # About QwertyBits
