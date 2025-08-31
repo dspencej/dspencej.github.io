@@ -36,10 +36,10 @@ jobs:
         # Check for hardcoded colors that should use CSS variables
         VIOLATIONS=0
         
-        # Check HTML files for hardcoded colors
-        if grep -r --include="*.html" --include="*.md" -n "#[0-9a-fA-F]\{6\}" . | grep -v "var(--" | grep -v "_site"; then
+        # Check HTML files for hardcoded colors (exclude documentation)
+        if grep -r --include="*.html" --include="*.md" -n "#[0-9a-fA-F]\{6\}" . | grep -v "var(--" | grep -v "_site" | grep -v "BRAND-GUIDELINES.md" | grep -v "README.md" | grep -v "CLAUDE.md"; then
           echo "❌ Found hardcoded hex colors in HTML/Markdown files:"
-          grep -r --include="*.html" --include="*.md" -n "#[0-9a-fA-F]\{6\}" . | grep -v "var(--" | grep -v "_site" | head -10
+          grep -r --include="*.html" --include="*.md" -n "#[0-9a-fA-F]\{6\}" . | grep -v "var(--" | grep -v "_site" | grep -v "BRAND-GUIDELINES.md" | grep -v "README.md" | grep -v "CLAUDE.md" | head -10
           VIOLATIONS=$((VIOLATIONS + 1))
         fi
         
@@ -50,17 +50,17 @@ jobs:
           VIOLATIONS=$((VIOLATIONS + 1))
         fi
         
-        # Check for old color values that should be updated
-        if grep -r --include="*.html" --include="*.css" --include="*.md" -i "#3498db\|#2c3e50\|#34495e\|#f8f9fa" . | grep -v "_site"; then
+        # Check for old color values that should be updated (exclude documentation)
+        if grep -r --include="*.html" --include="*.css" --include="*.md" -i "#3498db\|#2c3e50\|#34495e\|#f8f9fa" . | grep -v "_site" | grep -v "BRAND-GUIDELINES.md" | grep -v "README.md" | grep -v "CLAUDE.md"; then
           echo "❌ Found old brand colors that should use CSS variables:"
-          grep -r --include="*.html" --include="*.css" --include="*.md" -i "#3498db\|#2c3e50\|#34495e\|#f8f9fa" . | grep -v "_site" | head -10
+          grep -r --include="*.html" --include="*.css" --include="*.md" -i "#3498db\|#2c3e50\|#34495e\|#f8f9fa" . | grep -v "_site" | grep -v "BRAND-GUIDELINES.md" | grep -v "README.md" | grep -v "CLAUDE.md" | head -10
           VIOLATIONS=$((VIOLATIONS + 1))
         fi
         
-        # Check for improper contrast usage (medium-text on light backgrounds)
-        if grep -r --include="*.html" --include="*.css" "medium-text" . | grep -v "_site" | grep -v "brand.css"; then
+        # Check for improper contrast usage (exclude documentation)
+        if grep -r --include="*.html" --include="*.css" "medium-text" . | grep -v "_site" | grep -v "brand.css" | grep -v "BRAND-GUIDELINES.md" | grep -v "README.md" | grep -v "CLAUDE.md"; then
           echo "❌ Found medium-text usage that may cause contrast issues:"
-          grep -r --include="*.html" --include="*.css" -n "medium-text" . | grep -v "_site" | grep -v "brand.css"
+          grep -r --include="*.html" --include="*.css" -n "medium-text" . | grep -v "_site" | grep -v "brand.css" | grep -v "BRAND-GUIDELINES.md" | grep -v "README.md" | grep -v "CLAUDE.md"
           VIOLATIONS=$((VIOLATIONS + 1))
         fi
         
