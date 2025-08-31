@@ -1,247 +1,151 @@
 ---
+layout: default
+title: "Tech Blog - Programming, Software Development & Digital Innovations"
+description: "Welcome to QwertyBits - where technology meets curiosity. Explore AI & LLMs, embedded systems, retro computing, coding adventures, and digital tinkering."
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QwertyBits - Tech Blog</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
-    
-    <!-- Brand CSS -->
-    <link rel="stylesheet" href="/assets/css/brand.css">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
-    <style>
-        body {
-            font-family: var(--font-family-sans);
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: var(--background-alt);
-            color: var(--dark-text);
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--background);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-        h1 {
-            color: var(--primary-dark);
-            border-bottom: 3px solid var(--primary-blue);
-            padding-bottom: 10px;
-            margin-bottom: 30px;
-            font-weight: 700;
-            font-size: 2.5rem;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--primary-blue);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-family-mono);
-            font-weight: bold;
-            font-size: 16px;
-            color: white;
-        }
-        .intro {
-            background: linear-gradient(135deg, var(--background-alt) 0%, #f1f5f9 100%);
-            padding: 25px;
-            border-radius: var(--border-radius);
-            margin: 25px 0;
-            border-left: 4px solid var(--primary-blue);
-            box-shadow: 0 2px 8px rgba(41, 128, 185, 0.1);
-        }
-        .intro p {
-            margin: 0;
-            font-size: 1.1rem;
-            color: var(--dark-text);
-            line-height: 1.7;
-            font-weight: 500;
-        }
-        .nav {
-            margin-bottom: 30px;
-            text-align: center;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .nav a {
-            color: var(--primary-blue);
-            text-decoration: none;
-            margin: 0 20px;
-            font-weight: 500;
-            font-size: 1.1rem;
-            padding: 8px 16px;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-        }
-        .nav a:hover {
-            background-color: var(--primary-blue);
-            color: white;
-            transform: translateY(-1px);
-        }
-        .posts {
-            margin-top: 40px;
-        }
-        .posts h2 {
-            color: var(--primary-dark);
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            font-weight: 600;
-        }
-        .coming-soon {
-            text-align: center;
-            color: var(--light-text);
-            font-style: italic;
-            padding: 50px 30px;
-            background: var(--background-alt);
-            border-radius: var(--border-radius);
-            border: 2px dashed var(--border-color);
-        }
-        .coming-soon p {
-            margin: 10px 0;
-            font-size: 1.1rem;
-        }
-        .tech-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .badge {
-            background: var(--secondary-green);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            font-family: var(--font-family-mono);
-        }
-        .badge.ai { background: var(--primary-blue); }
-        .badge.embedded { background: var(--secondary-orange); }
-        .badge.retro { background: var(--secondary-purple); }
-        .badge.coding { background: var(--secondary-green); }
-        .post-preview {
-            background: var(--background);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .post-preview:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .post-preview h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.4rem;
-            font-weight: 600;
-        }
-        .post-preview h3 a {
-            color: var(--primary-dark);
-            text-decoration: none;
-        }
-        .post-preview h3 a:hover {
-            color: var(--primary-blue);
-        }
-        .post-meta {
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-            color: var(--light-text);
-        }
-        .post-meta .date {
-            margin-right: 15px;
-        }
-        .post-meta .categories {
-            display: inline-flex;
-            gap: 5px;
-        }
-        .post-excerpt {
-            color: var(--dark-text);
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        .read-more {
-            color: var(--primary-blue);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        .read-more:hover {
-            color: var(--primary-dark);
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>
-            <span class="logo-icon">QB</span>
-            QwertyBits
-        </h1>
-        
-        <nav class="nav">
-            <a href="/">Home</a>
-            <a href="/posts/">Posts</a>
-            <a href="/about/">About</a>
-        </nav>
-        
-        <div class="intro">
-            <p>Welcome to QwertyBits - where technology meets curiosity. This is a tech blog exploring AI & LLMs, embedded systems, retro computing, coding adventures, and digital tinkering.</p>
+
+<style>
+    .intro {
+        background: linear-gradient(135deg, var(--background-alt) 0%, #f1f5f9 100%);
+        padding: 25px;
+        border-radius: var(--border-radius);
+        margin: 25px 0;
+        border-left: 4px solid var(--primary-blue);
+        box-shadow: 0 2px 8px rgba(41, 128, 185, 0.1);
+    }
+    .intro p {
+        margin: 0;
+        font-size: 1.1rem;
+        color: var(--dark-text);
+        line-height: 1.7;
+        font-weight: 500;
+    }
+    .posts h2 {
+        color: var(--primary-dark);
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+        font-weight: 600;
+    }
+    .coming-soon {
+        text-align: center;
+        color: var(--light-text);
+        font-style: italic;
+        padding: 50px 30px;
+        background: var(--background-alt);
+        border-radius: var(--border-radius);
+        border: 2px dashed var(--border-color);
+    }
+    .coming-soon p {
+        margin: 10px 0;
+        font-size: 1.1rem;
+    }
+    .tech-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .badge {
+        background: var(--secondary-green);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        font-family: var(--font-family-mono);
+    }
+    .badge.ai { background: var(--primary-blue); }
+    .badge.embedded { background: var(--secondary-orange); }
+    .badge.retro { background: var(--secondary-purple); }
+    .badge.coding { background: var(--secondary-green); }
+    .post-preview {
+        background: var(--background);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .post-preview:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .post-preview h3 {
+        margin: 0 0 10px 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+    .post-preview h3 a {
+        color: var(--primary-dark);
+        text-decoration: none;
+    }
+    .post-preview h3 a:hover {
+        color: var(--primary-blue);
+    }
+    .post-meta {
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+        color: var(--light-text);
+    }
+    .post-meta .date {
+        margin-right: 15px;
+    }
+    .post-meta .categories {
+        display: inline-flex;
+        gap: 5px;
+    }
+    .post-excerpt {
+        color: var(--dark-text);
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+    .read-more {
+        color: var(--primary-blue);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+    .read-more:hover {
+        color: var(--primary-dark);
+    }
+</style>
+
+<div class="intro">
+    <p>Welcome to QwertyBits - where technology meets curiosity. This is a tech blog exploring AI & LLMs, embedded systems, retro computing, coding adventures, and digital tinkering.</p>
+</div>
+
+<div class="posts">
+    <h2>Recent Posts</h2>
+    {% if site.posts.size > 0 %}
+        {% for post in site.posts limit:5 %}
+        <article class="post-preview">
+            <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+            <div class="post-meta">
+                <span class="date">{{ post.date | date: "%B %-d, %Y" }}</span>
+                {% if post.categories.size > 0 %}
+                <span class="categories">
+                    {% for category in post.categories %}
+                    <span class="badge">{{ category }}</span>
+                    {% endfor %}
+                </span>
+                {% endif %}
+            </div>
+            <p class="post-excerpt">{{ post.description | default: post.excerpt | strip_html | truncatewords: 30 }}</p>
+            <a href="{{ post.url }}" class="read-more">Read more →</a>
+        </article>
+        {% endfor %}
+    {% else %}
+        <div class="coming-soon">
+            <p>Blog posts coming soon...</p>
+            <p>Stay tuned for content about:</p>
+            <div class="tech-badges">
+                <span class="badge ai">AI & LLMs</span>
+                <span class="badge embedded">Embedded Systems</span>
+                <span class="badge retro">Retro Computing</span>
+                <span class="badge coding">Code Adventures</span>
+                <span class="badge">Tech Tinkering</span>
+            </div>
         </div>
-        
-        <div class="posts">
-            <h2>Recent Posts</h2>
-            {% if site.posts.size > 0 %}
-                {% for post in site.posts limit:5 %}
-                <article class="post-preview">
-                    <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-                    <div class="post-meta">
-                        <span class="date">{{ post.date | date: "%B %-d, %Y" }}</span>
-                        {% if post.categories.size > 0 %}
-                        <span class="categories">
-                            {% for category in post.categories %}
-                            <span class="badge">{{ category }}</span>
-                            {% endfor %}
-                        </span>
-                        {% endif %}
-                    </div>
-                    <p class="post-excerpt">{{ post.description | default: post.excerpt | strip_html | truncatewords: 30 }}</p>
-                    <a href="{{ post.url }}" class="read-more">Read more →</a>
-                </article>
-                {% endfor %}
-            {% else %}
-                <div class="coming-soon">
-                    <p>Blog posts coming soon...</p>
-                    <p>Stay tuned for content about:</p>
-                    <div class="tech-badges">
-                        <span class="badge ai">AI & LLMs</span>
-                        <span class="badge embedded">Embedded Systems</span>
-                        <span class="badge retro">Retro Computing</span>
-                        <span class="badge coding">Code Adventures</span>
-                        <span class="badge">Tech Tinkering</span>
-                    </div>
-                </div>
-            {% endif %}
-        </div>
-    </div>
-</body>
-</html>
+    {% endif %}
+</div>
