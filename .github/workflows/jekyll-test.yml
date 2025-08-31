@@ -1,0 +1,41 @@
+name: Jekyll Site CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.1'
+        bundler-cache: true
+        
+    - name: Install dependencies
+      run: bundle install
+      
+    - name: Build site
+      run: bundle exec jekyll build --verbose
+      
+    - name: Test HTML
+      uses: chabad360/htmlproofer@master
+      with:
+        directory: "./_site"
+        arguments: --only-4xx --check-favicon --check-html --assume-extension --empty-alt-ignore --disable-external
+      continue-on-error: true
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: site-build
+        path: _site/

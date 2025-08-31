@@ -18,22 +18,46 @@ This is a GitHub Pages blog site for QwertyBits (qwertybits.io), a tech blog cov
   - `index.html`: Homepage with custom styling
   - `_config.yml`: Jekyll configuration
 
-## Common Development Commands
+## Local Development Setup
 
-### Local Development
+### Prerequisites
+- Ruby 3.1+ installed
+- Bundler gem installed (`gem install bundler`)
+
+### Initial Setup
 ```bash
+# Clone the repository
+git clone https://github.com/dspencej/dspencej.github.io.git
+cd dspencej.github.io
+
 # Install dependencies
 bundle install
+```
 
-# Serve locally (requires Ruby/Jekyll)
+### Common Development Commands
+
+```bash
+# Serve locally with live reload (recommended for development)
+bundle exec jekyll serve --livereload --drafts
+
+# Serve locally (basic)
 bundle exec jekyll serve
 
-# Build site
+# Build site for testing
 bundle exec jekyll build
 
 # Clean build artifacts
 bundle exec jekyll clean
+
+# Check for issues
+bundle exec jekyll doctor
 ```
+
+### Development Workflow
+1. Create new posts in `_posts/` with format: `YYYY-MM-DD-title.md`
+2. Use `_drafts/` folder for work-in-progress posts (shown with `--drafts` flag)
+3. Test locally with `bundle exec jekyll serve --livereload`
+4. Commit and push when ready - GitHub Actions will test the build
 
 ### Content Management
 
