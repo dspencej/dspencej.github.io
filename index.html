@@ -137,6 +137,56 @@
         .badge.embedded { background: var(--secondary-orange); }
         .badge.retro { background: var(--secondary-purple); }
         .badge.coding { background: var(--secondary-green); }
+        .post-preview {
+            background: var(--background);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .post-preview:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .post-preview h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        .post-preview h3 a {
+            color: var(--primary-dark);
+            text-decoration: none;
+        }
+        .post-preview h3 a:hover {
+            color: var(--primary-blue);
+        }
+        .post-meta {
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+        .post-meta .date {
+            margin-right: 15px;
+        }
+        .post-meta .categories {
+            display: inline-flex;
+            gap: 5px;
+        }
+        .post-excerpt {
+            color: var(--dark-text);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .read-more {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .read-more:hover {
+            color: var(--primary-dark);
+        }
     </style>
 </head>
 <body>
@@ -157,17 +207,37 @@
         
         <div class="posts">
             <h2>Recent Posts</h2>
-            <div class="coming-soon">
-                <p>Blog posts coming soon...</p>
-                <p>Stay tuned for content about:</p>
-                <div class="tech-badges">
-                    <span class="badge ai">AI & LLMs</span>
-                    <span class="badge embedded">Embedded Systems</span>
-                    <span class="badge retro">Retro Computing</span>
-                    <span class="badge coding">Code Adventures</span>
-                    <span class="badge">Tech Tinkering</span>
+            {% if site.posts.size > 0 %}
+                {% for post in site.posts limit:5 %}
+                <article class="post-preview">
+                    <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+                    <div class="post-meta">
+                        <span class="date">{{ post.date | date: "%B %-d, %Y" }}</span>
+                        {% if post.categories.size > 0 %}
+                        <span class="categories">
+                            {% for category in post.categories %}
+                            <span class="badge">{{ category }}</span>
+                            {% endfor %}
+                        </span>
+                        {% endif %}
+                    </div>
+                    <p class="post-excerpt">{{ post.description | default: post.excerpt | strip_html | truncatewords: 30 }}</p>
+                    <a href="{{ post.url }}" class="read-more">Read more →</a>
+                </article>
+                {% endfor %}
+            {% else %}
+                <div class="coming-soon">
+                    <p>Blog posts coming soon...</p>
+                    <p>Stay tuned for content about:</p>
+                    <div class="tech-badges">
+                        <span class="badge ai">AI & LLMs</span>
+                        <span class="badge embedded">Embedded Systems</span>
+                        <span class="badge retro">Retro Computing</span>
+                        <span class="badge coding">Code Adventures</span>
+                        <span class="badge">Tech Tinkering</span>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 </body>
