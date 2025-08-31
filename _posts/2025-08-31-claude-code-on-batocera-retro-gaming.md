@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Hacking Batocera: Installing Claude Code on a Retro Gaming Console OS"
-date: 2025-08-31 15:30:00 -0000
+date: 2025-08-31 10:00:00 -0000
 categories: retro-computing gaming vintage
 tags: [retro, batocera, claude-code, gaming, linux, ai-tools, emulation, mini-pc]
 description: "How I got Anthropic's Claude Code CLI running on Batocera OS - from wrestling with pacman to portable Node.js solutions"
