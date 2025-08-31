@@ -31,6 +31,7 @@ paginate_path: "/page:num/"
 exclude:
   - .gitignore
   - README.md
+  - CLAUDE.md
   - Gemfile
   - Gemfile.lock
   - node_modules
