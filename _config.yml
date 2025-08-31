@@ -17,11 +17,27 @@ plugins:
 
 # SEO settings
 author: "Dustin Spencer"
+lang: en
+logo: /assets/images/logo.png
 social:
   name: "Dustin Spencer"
   links:
     - "https://github.com/dspencej"
     - "https://www.linkedin.com/in/dustin-spencer"
+
+# SEO defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "Dustin Spencer"
+      image: /assets/images/og-default.png
+  - scope:
+      path: ""
+    values:
+      image: /assets/images/og-default.png
 
 # Blog settings
 paginate: 5
