@@ -16,17 +16,27 @@ cp _drafts/template-ai-llm.md _posts/2025-01-15-your-post-title.md
 code _posts/2025-01-15-your-post-title.md
 ```
 
-### 2. Local Development
+### 2. Local Preview & Quality Control
 ```bash
-# Start local server with live reload
-bundle exec jekyll serve --livereload --drafts
+# Windows: Double-click dev-server.bat
+# Mac/Linux: ./dev-server.sh  
+# Manual: bundle exec jekyll serve --livereload --drafts
 
 # View at http://localhost:4000
 # Auto-refreshes as you edit
 ```
 
-### 3. Commit and Push
+**Quality Checklist:**
+- ✅ Content displays correctly
+- ✅ Navigation works properly
+- ✅ Mobile layout looks good
+- ✅ All links function
+- ✅ No formatting issues
+
+### 3. Commit and Push (Only After Local Preview)
 ```bash
+# IMPORTANT: Only proceed after local quality check passes!
+
 # Add and commit your changes
 git add _posts/2025-01-15-your-post-title.md
 git commit -m "Add post: Your Post Title"
@@ -34,6 +44,8 @@ git commit -m "Add post: Your Post Title"
 # Push to trigger CI pipeline
 git push -u origin blog/2025-01-15-your-post-title
 ```
+
+**⚠️ Critical Step**: Always preview locally first! This prevents publishing broken content.
 
 ### 4. Create Pull Request
 ```bash
